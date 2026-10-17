@@ -1,0 +1,83 @@
+name: Orbit
+
+options:
+  deploymentTarget:
+    macOS: "14.0"
+  developmentLanguage: en
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+
+configFiles:
+  Debug: Config/Shared.xcconfig
+  Release: Config/Shared.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_HARDENED_RUNTIME: YES
+    CODE_SIGN_STYLE: Automatic
+    DEAD_CODE_STRIPPING: YES
+
+packages:
+  OrbitKit:
+    path: Packages/OrbitKit
+
+targets:
+  Orbit:
+    type: application
+    platform: macOS
+    sources: [App]
+    dependencies:
+      - target: OrbitFinderExtension
+      - package: OrbitKit
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Orbit
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSApplicationCategoryType: public.app-category.utilities
+        NSHumanReadableCopyright: ""
+        OrbitAppGroupID: $(ORBIT_APP_GROUP_ID)
+    entitlements:
+      path: App/Orbit.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(ORBIT_APP_GROUP_ID)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(ORBIT_BUNDLE_ID)
+    scheme: {}
+
+  OrbitFinderExtension:
+    type: app-extension
+    platform: macOS
+    sources: [FinderExtension]
+    dependencies:
+      - package: OrbitKit
+    info:
+      path: FinderExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Orbit
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        OrbitAppGroupID: $(ORBIT_APP_GROUP_ID)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.FinderSync
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).FinderSync
+    entitlements:
+      path: FinderExtension/OrbitFinderExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - $(ORBIT_APP_GROUP_ID)
+        # Finder Sync extensions must be sandboxed, but they need to write into whatever
+        # folder the user right-clicked. Acceptable for distribution outside the App Store.
+        com.apple.security.temporary-exception.files.home-relative-path.read-write:
+          - /
+        com.apple.security.temporary-exception.files.absolute-path.read-write:
+          - /Volumes/
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(ORBIT_BUNDLE_ID).FinderExtension

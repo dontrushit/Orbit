@@ -1,0 +1,4 @@
+// Copy to Local.xcconfig (git-ignored) and fill in your Team ID.
+// A free Apple ID works: Xcode → Settings → Accounts → add Apple ID → "Personal Team".
+
+DEVELOPMENT_TEAM = XXXXXXXXXX

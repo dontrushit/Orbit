@@ -1,0 +1,66 @@
+import Foundation
+
+/// Where a Finder menu action was invoked.
+public struct FinderContext: Sendable {
+    /// The folder the user right-clicked in.
+    public let targetFolder: URL
+
+    public init(targetFolder: URL) {
+        self.targetFolder = targetFolder
+    }
+}
+
+/// What the Finder extension should do after an action succeeds.
+public enum FinderActionResult: Sendable, Equatable {
+    case done
+    /// Select the item in Finder.
+    case reveal(URL)
+}
+
+/// A platform-neutral description of a Finder context menu item. The extension turns it into `NSMenuItem`.
+public struct FinderMenuItem: Sendable {
+    public typealias Action = @Sendable (FinderContext) throws -> FinderActionResult
+
+    public enum Icon: Sendable, Equatable {
+        case symbol(String)
+        /// The Finder icon for files with this extension.
+        case fileType(String)
+    }
+
+    public enum Kind: Sendable {
+        case action(Action)
+        case submenu([FinderMenuItem])
+    }
+
+    public let title: LocalizedStringResource
+    public let icon: Icon?
+    public let kind: Kind
+
+    public init(title: LocalizedStringResource, icon: Icon? = nil, action: @escaping Action) {
+        self.title = title
+        self.icon = icon
+        kind = .action(action)
+    }
+
+    public init(title: LocalizedStringResource, icon: Icon? = nil, children: [FinderMenuItem]) {
+        self.title = title
+        self.icon = icon
+        kind = .submenu(children)
+    }
+}
+
+/// A module that adds items to the Finder context menu.
+public protocol FinderMenuProviding: OrbitModule {
+    /// Called every time the menu opens, so it must be cheap. Return `[]` to add nothing.
+    func finderMenuItems(store: SettingsStore) -> [FinderMenuItem]
+}
+
+public enum FinderMenu {
+    /// Items from every enabled module, in registry order.
+    public static func items(store: SettingsStore, modules: [any OrbitModule] = ModuleRegistry.all) -> [FinderMenuItem] {
+        modules
+            .filter { store.isEnabled($0) }
+            .compactMap { $0 as? any FinderMenuProviding }
+            .flatMap { $0.finderMenuItems(store: store) }
+    }
+}
