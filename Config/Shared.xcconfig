@@ -5,7 +5,7 @@ ORBIT_BUNDLE_ID = dev.orbit.mac
 // macOS-style App Group (Team ID prefix): no provisioning profile, no access prompt on macOS 15+.
 ORBIT_APP_GROUP_ID = $(TeamIdentifierPrefix)$(ORBIT_BUNDLE_ID).shared
 
-MARKETING_VERSION = 0.1.0
-CURRENT_PROJECT_VERSION = 1
+MARKETING_VERSION = 0.2.0
+CURRENT_PROJECT_VERSION = 2
 
 #include? "Local.xcconfig"
