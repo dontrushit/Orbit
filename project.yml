@@ -18,6 +18,8 @@ settings:
     ENABLE_HARDENED_RUNTIME: YES
     CODE_SIGN_STYLE: Automatic
     DEAD_CODE_STRIPPING: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+    LOCALIZATION_PREFERS_STRING_CATALOGS: YES
 
 packages:
   OrbitKit:
@@ -27,7 +29,7 @@ targets:
   Orbit:
     type: application
     platform: macOS
-    sources: [App]
+    sources: [App, Localization]
     dependencies:
       - target: OrbitFinderExtension
       - package: OrbitKit
@@ -54,7 +56,8 @@ targets:
   OrbitFinderExtension:
     type: app-extension
     platform: macOS
-    sources: [FinderExtension]
+    # Shares the string catalog: OrbitKit strings resolve against the bundle of the running process.
+    sources: [FinderExtension, Localization]
     dependencies:
       - package: OrbitKit
     info:

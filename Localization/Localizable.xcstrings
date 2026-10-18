@@ -1,0 +1,279 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "About Orbit": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "О программе Orbit"
+          }
+        }
+      }
+    },
+    "Adds the features macOS is missing.\nWorks locally: no servers, accounts or telemetry.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Добавляет функции, которых нет в macOS.\nРаботает локально: без серверов, аккаунтов и телеметрии."
+          }
+        }
+      }
+    },
+    "Create text, Markdown, JSON and HTML files right from the Finder context menu.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Создавайте текстовые файлы, Markdown, JSON и HTML прямо из контекстного меню Finder."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Each file type is a separate item, such as “New Text File”.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждый тип файла — отдельный пункт, например «Новый текстовый файл»."
+          }
+        }
+      }
+    },
+    "Enabled": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включено"
+          }
+        }
+      }
+    },
+    "File Name": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Имя файла"
+          }
+        }
+      }
+    },
+    "File Types": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Типы файлов"
+          }
+        }
+      }
+    },
+    "File types are grouped in the “New File” submenu.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Типы файлов собраны в подменю «Новый файл»."
+          }
+        }
+      }
+    },
+    "Finder Menu": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Меню Finder"
+          }
+        }
+      }
+    },
+    "Finder extension is turned off": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Расширение Finder выключено"
+          }
+        }
+      }
+    },
+    "HTML": {
+      "shouldTranslate": false,
+      "extractionState": "manual"
+    },
+    "JSON": {
+      "shouldTranslate": false,
+      "extractionState": "manual"
+    },
+    "Markdown": {
+      "shouldTranslate": false,
+      "extractionState": "manual"
+    },
+    "Modules": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Модули"
+          }
+        }
+      }
+    },
+    "New File": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый файл"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "New HTML File": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый файл HTML"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "New JSON File": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый файл JSON"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "New Markdown File": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый файл Markdown"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "New Text File": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новый текстовый файл"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "New files are named “%@.txt”, “%@ 2.txt” and so on.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Новые файлы называются «%1$@.txt», «%2$@ 2.txt» и так далее."
+          }
+        }
+      }
+    },
+    "Orbit": {
+      "shouldTranslate": false
+    },
+    "Plain Text": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Простой текст"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Separate Items": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отдельные пункты"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Настройки"
+          }
+        }
+      }
+    },
+    "Submenu": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подменю"
+          }
+        }
+      }
+    },
+    "Turn On…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить…"
+          }
+        }
+      }
+    },
+    "Turn on Orbit in General → Login Items & Extensions → Finder to add items to the context menu.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включите Orbit в разделе «Основные → Объекты входа и расширения → Finder», чтобы добавить пункты в контекстное меню."
+          }
+        }
+      }
+    },
+    "Turn on at least one file type to see New File in Finder.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включите хотя бы один тип файла, чтобы «Новый файл» появился в Finder."
+          }
+        }
+      }
+    },
+    "Untitled": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без названия"
+          }
+        }
+      },
+      "extractionState": "manual"
+    }
+  },
+  "version": "1.0"
+}

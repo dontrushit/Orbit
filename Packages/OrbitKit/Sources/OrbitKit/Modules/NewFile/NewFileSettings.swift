@@ -1,7 +1,8 @@
 import Foundation
 
 public struct NewFileSettings: Codable, Equatable, Sendable {
-    public static let defaultBaseName = "Untitled"
+    /// Localized like the "Untitled" of system apps, since it ends up in file names.
+    public static var defaultBaseName: String { String(localized: "Untitled") }
 
     /// How file types appear in the Finder context menu.
     public enum MenuStyle: String, Codable, CaseIterable, Sendable {
