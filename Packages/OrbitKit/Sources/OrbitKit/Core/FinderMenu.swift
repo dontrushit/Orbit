@@ -16,8 +16,8 @@ public struct FinderContext: Sendable {
 /// What the Finder extension should do after an action succeeds.
 public enum FinderActionResult: Sendable, Equatable {
     case done
-    /// Select the item in Finder.
-    case reveal(URL)
+    /// Select the items in Finder.
+    case reveal([URL])
     /// Put the text on the clipboard.
     case copy(String)
 }
@@ -56,16 +56,17 @@ public struct FinderMenuItem: Sendable {
 
 /// A module that adds items to the Finder context menu.
 public protocol FinderMenuProviding: OrbitModule {
-    /// Called every time the menu opens, so it must be cheap. Return `[]` to add nothing.
-    func finderMenuItems(store: SettingsStore) -> [FinderMenuItem]
+    /// Called every time the menu opens, so it must be cheap: no file access. Return `[]` to add nothing.
+    /// - Parameter selection: The items the menu was opened on; empty on the folder background.
+    func finderMenuItems(store: SettingsStore, selection: [URL]) -> [FinderMenuItem]
 }
 
 public enum FinderMenu {
     /// Items from every enabled module, in registry order.
-    public static func items(store: SettingsStore, modules: [any OrbitModule] = ModuleRegistry.all) -> [FinderMenuItem] {
+    public static func items(store: SettingsStore, selection: [URL] = [], modules: [any OrbitModule] = ModuleRegistry.all) -> [FinderMenuItem] {
         modules
             .filter { store.isEnabled($0) }
             .compactMap { $0 as? any FinderMenuProviding }
-            .flatMap { $0.finderMenuItems(store: store) }
+            .flatMap { $0.finderMenuItems(store: store, selection: selection) }
     }
 }

@@ -5,6 +5,9 @@ import UniformTypeIdentifiers
 
 final class FinderSync: FIFinderSync {
     private let logger = Log.logger("FinderSync")
+    /// Actions run here, one at a time. Not in a Swift concurrency task: conversion blocks on CoreText,
+    /// which deadlocks once every thread of the cooperative pool waits for it.
+    private static let actionQueue = DispatchQueue(label: "dev.orbit.FinderSync.actions", qos: .userInitiated)
 
     /// Actions of the menu built most recently, indexed by `NSMenuItem.tag`.
     /// Finder hands the action a copy of the menu item, so only the tag survives the round trip.
@@ -23,7 +26,8 @@ final class FinderSync: FIFinderSync {
     override func menu(for menuKind: FIMenuKind) -> NSMenu? {
         guard menuKind == .contextualMenuForContainer || menuKind == .contextualMenuForItems else { return nil }
 
-        let items = FinderMenu.items(store: .shared)
+        let selection = menuKind == .contextualMenuForItems ? FIFinderSyncController.default().selectedItemURLs() ?? [] : []
+        let items = FinderMenu.items(store: .shared, selection: selection)
         guard !items.isEmpty else { return nil }
 
         self.menuKind = menuKind
@@ -77,20 +81,32 @@ final class FinderSync: FIFinderSync {
             return
         }
         let selectedItems = menuKind == .contextualMenuForItems ? controller.selectedItemURLs() ?? [] : []
+        let action = actions[sender.tag]
+        let context = FinderContext(targetFolder: folder, selectedItems: selectedItems)
+        let logger = logger
 
-        do {
-            switch try actions[sender.tag](FinderContext(targetFolder: folder, selectedItems: selectedItems)) {
-            case .done:
-                break
-            case .reveal(let url):
-                NSWorkspace.shared.activateFileViewerSelecting([url])
-            case .copy(let string):
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(string, forType: .string)
+        // Off the main thread: converting a long document takes a while, and the extension must keep answering Finder.
+        Self.actionQueue.async {
+            do {
+                let result = try action(context)
+                DispatchQueue.main.async { Self.apply(result) }
+            } catch {
+                logger.error("Action failed in \(folder.path, privacy: .public): \(error, privacy: .public)")
+                DispatchQueue.main.async { NSSound.beep() }
             }
-        } catch {
-            logger.error("Action failed in \(folder.path, privacy: .public): \(error, privacy: .public)")
-            NSSound.beep()
+        }
+    }
+
+    @MainActor
+    private static func apply(_ result: FinderActionResult) {
+        switch result {
+        case .done:
+            break
+        case .reveal(let urls):
+            NSWorkspace.shared.activateFileViewerSelecting(urls)
+        case .copy(let string):
+            NSPasteboard.general.clearContents()
+            NSPasteboard.general.setString(string, forType: .string)
         }
     }
 }

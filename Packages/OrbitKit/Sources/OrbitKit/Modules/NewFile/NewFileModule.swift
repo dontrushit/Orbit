@@ -14,7 +14,7 @@ public struct NewFileModule: OrbitModule {
 }
 
 extension NewFileModule: FinderMenuProviding {
-    public func finderMenuItems(store: SettingsStore) -> [FinderMenuItem] {
+    public func finderMenuItems(store: SettingsStore, selection: [URL]) -> [FinderMenuItem] {
         let settings = store.newFile
         let templates = settings.enabledTemplates
         guard !templates.isEmpty else { return [] }
@@ -22,7 +22,7 @@ extension NewFileModule: FinderMenuProviding {
         let baseName = settings.resolvedBaseName
         func item(for template: FileTemplate, title: LocalizedStringResource) -> FinderMenuItem {
             FinderMenuItem(title: title, icon: .fileType(template.fileExtension)) { context in
-                .reveal(try FileCreator.createFile(from: template, baseName: baseName, in: Self.destination(for: context)))
+                .reveal([try FileCreator.createFile(from: template, baseName: baseName, in: Self.destination(for: context))])
             }
         }
 

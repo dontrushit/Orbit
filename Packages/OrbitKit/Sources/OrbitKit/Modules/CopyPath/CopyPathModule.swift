@@ -14,7 +14,7 @@ public struct CopyPathModule: OrbitModule {
 }
 
 extension CopyPathModule: FinderMenuProviding {
-    public func finderMenuItems(store: SettingsStore) -> [FinderMenuItem] {
+    public func finderMenuItems(store: SettingsStore, selection: [URL]) -> [FinderMenuItem] {
         let format = store.copyPath.format
         return [FinderMenuItem(title: "Copy Path", icon: .symbol(symbolName)) { context in
             // On the folder background there's no selection: copy the folder itself.

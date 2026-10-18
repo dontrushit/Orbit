@@ -72,7 +72,7 @@ import Testing
             Issue.record("Inline item should be an action")
             return
         }
-        #expect(try action(FinderContext(targetFolder: folder)) == .reveal(folder.appendingPathComponent("Untitled.txt")))
+        #expect(try action(FinderContext(targetFolder: folder)) == .reveal([folder.appendingPathComponent("Untitled.txt")]))
     }
 
     @Test func disabledModuleAddsNothing() {
@@ -101,7 +101,7 @@ import Testing
         let result = try action(FinderContext(targetFolder: folder))
 
         let expected = folder.appendingPathComponent("Note.md")
-        #expect(result == .reveal(expected))
+        #expect(result == .reveal([expected]))
         #expect(FileManager.default.fileExists(atPath: expected.path))
     }
 
@@ -110,11 +110,11 @@ import Testing
             Issue.record("Template item should be an action")
             return nil
         }
-        guard case .reveal(let url) = try action(FinderContext(targetFolder: folder, selectedItems: selection)) else {
+        guard case .reveal(let urls) = try action(FinderContext(targetFolder: folder, selectedItems: selection)), urls.count == 1 else {
             Issue.record("New File should reveal the created file")
             return nil
         }
-        return url
+        return urls[0]
     }
 
     private func makeFolder(_ name: String) throws -> URL {
