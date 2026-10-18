@@ -73,10 +73,18 @@ import Testing
         #expect(settings == NewFileSettings())
     }
 
+    @Test func unknownMenuStyleFallsBackToDefault() throws {
+        let json = #"{"baseName": "Note", "menuStyle": "carousel"}"#
+        let settings = try JSONDecoder().decode(NewFileSettings.self, from: Data(json.utf8))
+        #expect(settings.menuStyle == .submenu)
+        #expect(settings.baseName == "Note")
+    }
+
     @Test func roundTripsThroughJSON() throws {
         var settings = NewFileSettings()
         settings.setEnabled(false, for: .html)
         settings.baseName = "Note"
+        settings.menuStyle = .inline
         let decoded = try JSONDecoder().decode(NewFileSettings.self, from: JSONEncoder().encode(settings))
         #expect(decoded == settings)
     }

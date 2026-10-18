@@ -3,10 +3,19 @@ import Foundation
 public struct NewFileSettings: Codable, Equatable, Sendable {
     public static let defaultBaseName = "Untitled"
 
+    /// How file types appear in the Finder context menu.
+    public enum MenuStyle: String, Codable, CaseIterable, Sendable {
+        /// One "New File" item with a submenu of file types.
+        case submenu
+        /// A separate item for every file type, right in the context menu.
+        case inline
+    }
+
     /// Stored as "disabled" so that file types added in future versions show up enabled.
     public var disabledTemplateIDs: Set<String> = []
     /// Name for new files as typed by the user; may be empty or unsafe — see `resolvedBaseName`.
     public var baseName = ""
+    public var menuStyle = MenuStyle.submenu
 
     public init() {}
 
@@ -15,6 +24,8 @@ public struct NewFileSettings: Codable, Equatable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         disabledTemplateIDs = try container.decodeIfPresent(Set<String>.self, forKey: .disabledTemplateIDs) ?? []
         baseName = try container.decodeIfPresent(String.self, forKey: .baseName) ?? ""
+        // A style added by a newer version falls back to the default instead of resetting everything.
+        menuStyle = (try? container.decodeIfPresent(MenuStyle.self, forKey: .menuStyle)) ?? .submenu
     }
 
     public func isEnabled(_ template: FileTemplate) -> Bool {

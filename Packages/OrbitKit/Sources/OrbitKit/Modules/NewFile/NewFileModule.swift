@@ -20,11 +20,18 @@ extension NewFileModule: FinderMenuProviding {
         guard !templates.isEmpty else { return [] }
 
         let baseName = settings.resolvedBaseName
-        let children = templates.map { template in
-            FinderMenuItem(title: template.name, icon: .fileType(template.fileExtension)) { context in
+        func item(for template: FileTemplate, title: LocalizedStringResource) -> FinderMenuItem {
+            FinderMenuItem(title: title, icon: .fileType(template.fileExtension)) { context in
                 .reveal(try FileCreator.createFile(from: template, baseName: baseName, in: context.targetFolder))
             }
         }
-        return [FinderMenuItem(title: "New File", icon: .symbol(symbolName), children: children)]
+
+        switch settings.menuStyle {
+        case .submenu:
+            let children = templates.map { item(for: $0, title: $0.name) }
+            return [FinderMenuItem(title: "New File", icon: .symbol(symbolName), children: children)]
+        case .inline:
+            return templates.map { item(for: $0, title: $0.menuTitle) }
+        }
     }
 }

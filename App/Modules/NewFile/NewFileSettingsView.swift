@@ -32,6 +32,25 @@ struct NewFileSettingsView: View {
         }
 
         Section {
+            Picker("Finder Menu", selection: $model.settings.menuStyle) {
+                Text("Submenu").tag(NewFileSettings.MenuStyle.submenu)
+                Text("Separate Items").tag(NewFileSettings.MenuStyle.inline)
+            }
+            .pickerStyle(.inline)
+            .labelsHidden()
+        } header: {
+            Text("Finder Menu")
+        } footer: {
+            Group {
+                switch model.settings.menuStyle {
+                case .submenu: Text("File types are grouped in the “New File” submenu.")
+                case .inline: Text("Each file type is a separate item, such as “New Text File”.")
+                }
+            }
+            .foregroundStyle(.secondary)
+        }
+
+        Section {
             TextField("File Name", text: $model.settings.baseName, prompt: Text(verbatim: NewFileSettings.defaultBaseName))
         } footer: {
             Text("New files are named “\(model.settings.resolvedBaseName).txt”, “\(model.settings.resolvedBaseName) 2.txt” and so on.")

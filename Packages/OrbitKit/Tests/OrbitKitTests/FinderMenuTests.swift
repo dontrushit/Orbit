@@ -41,13 +41,44 @@ import Testing
         #expect(children.map(\.icon) == [.fileType("txt"), .fileType("json"), .fileType("html")])
     }
 
+    @Test func inlineStyleListsTemplatesInContextMenu() {
+        var settings = store.newFile
+        settings.menuStyle = .inline
+        settings.setEnabled(false, for: .html)
+        store.newFile = settings
+
+        let items = FinderMenu.items(store: store)
+        #expect(items.map(\.icon) == [.fileType("txt"), .fileType("md"), .fileType("json")])
+        #expect(items.map { String(localized: $0.title) } == ["New Text File", "New Markdown File", "New JSON File"])
+        for item in items {
+            guard case .action = item.kind else {
+                Issue.record("Inline items should be actions")
+                return
+            }
+        }
+    }
+
+    @Test func inlineActionCreatesFile() throws {
+        var settings = store.newFile
+        settings.menuStyle = .inline
+        store.newFile = settings
+
+        guard case .action(let action) = FinderMenu.items(store: store)[0].kind else {
+            Issue.record("Inline item should be an action")
+            return
+        }
+        #expect(try action(FinderContext(targetFolder: folder)) == .reveal(folder.appendingPathComponent("Untitled.txt")))
+    }
+
     @Test func disabledModuleAddsNothing() {
         store.setEnabled(false, for: NewFileModule())
         #expect(FinderMenu.items(store: store).isEmpty)
     }
 
-    @Test func noTemplatesAddsNothing() {
+    @Test(arguments: NewFileSettings.MenuStyle.allCases)
+    func noTemplatesAddsNothing(style: NewFileSettings.MenuStyle) {
         var settings = store.newFile
+        settings.menuStyle = style
         FileTemplate.builtIn.forEach { settings.setEnabled(false, for: $0) }
         store.newFile = settings
         #expect(FinderMenu.items(store: store).isEmpty)
