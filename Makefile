@@ -7,7 +7,7 @@ DERIVED  := build/DerivedData
 APP      := $(DERIVED)/Build/Products/Debug/Orbit.app
 XCODEBUILD := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -configuration Debug -derivedDataPath $(DERIVED) -destination 'platform=macOS' -quiet -allowProvisioningUpdates
 
-.PHONY: generate build check test run reload logs extension clean
+.PHONY: generate build check test run reload logs extension dmg clean
 
 generate:
 	xcodegen generate --quiet
@@ -35,6 +35,10 @@ logs:
 
 extension:
 	pluginkit -m -v -i dev.orbit.mac.FinderExtension
+
+# Signed Release build packed into build/Orbit-<version>.dmg.
+dmg: generate
+	Scripts/make-dmg.sh
 
 clean:
 	rm -rf build
