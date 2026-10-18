@@ -10,6 +10,13 @@ struct OrbitApp: App {
         }
         .defaultSize(width: 520, height: 460)
         .windowResizability(.contentMinSize)
+        .commands {
+            CommandGroup(replacing: .appInfo) {
+                Button("About Orbit") {
+                    AboutPanel.show()
+                }
+            }
+        }
     }
 }
 
