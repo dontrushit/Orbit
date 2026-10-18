@@ -34,11 +34,15 @@ ditto "$APP" "$STAGING/$APP_NAME"
 ln -s /Applications "$STAGING/Applications"
 
 hdiutil create -volname "Orbit $VERSION" -srcfolder "$STAGING" -fs HFS+ -format UDZO -ov -quiet "$DMG"
-rm -rf "$STAGING"
 
-# Launch Services registered the Release build: its extension would take over the one of the
-# Debug build (same bundle ID), and the Debug app would report the extension as turned off.
-pluginkit -r "$APP/Contents/PlugIns/OrbitFinderExtension.appex" 2>/dev/null || true
-/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -u "$APP"
+# Launch Services registered the Release build and its staging copy: their extension would take over
+# the one of the Debug build (same bundle ID), and the Debug app would report the extension as turned off.
+# A copy has to be unregistered while it still exists, or its record stays behind.
+LSREGISTER=/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
+for copy in "$APP" "$STAGING/$APP_NAME"; do
+    pluginkit -r "$PWD/$copy/Contents/PlugIns/OrbitFinderExtension.appex" 2>/dev/null || true
+    "$LSREGISTER" -u "$PWD/$copy" 2>/dev/null || true
+done
+rm -rf "$STAGING"
 
 echo "Created $DMG"
