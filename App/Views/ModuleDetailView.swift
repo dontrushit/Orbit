@@ -39,6 +39,7 @@ enum ModuleSettingsScreens {
     static func view(for id: ModuleID) -> AnyView? {
         switch id {
         case NewFileModule.id: AnyView(NewFileSettingsView())
+        case CopyPathModule.id: AnyView(CopyPathSettingsView())
         default: nil
         }
     }

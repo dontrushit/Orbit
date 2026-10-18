@@ -2,6 +2,7 @@
 public enum ModuleRegistry {
     public static let all: [any OrbitModule] = [
         NewFileModule(),
+        CopyPathModule(),
     ]
 
     public static func module(withID id: ModuleID) -> (any OrbitModule)? {

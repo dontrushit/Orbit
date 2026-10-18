@@ -22,8 +22,13 @@ import Testing
         try? FileManager.default.removeItem(at: folder)
     }
 
+    /// New File items only, so the tests don't depend on other modules.
+    private func items() -> [FinderMenuItem] {
+        FinderMenu.items(store: store, modules: [NewFileModule()])
+    }
+
     private func newFileSubmenu() throws -> [FinderMenuItem] {
-        let items = FinderMenu.items(store: store)
+        let items = self.items()
         try #require(items.count == 1)
         guard case .submenu(let children) = items[0].kind else {
             Issue.record("New File should be a submenu")
@@ -47,7 +52,7 @@ import Testing
         settings.setEnabled(false, for: .html)
         store.newFile = settings
 
-        let items = FinderMenu.items(store: store)
+        let items = self.items()
         #expect(items.map(\.icon) == [.fileType("txt"), .fileType("md"), .fileType("json")])
         #expect(items.map { String(localized: $0.title) } == ["New Text File", "New Markdown File", "New JSON File"])
         for item in items {
@@ -63,7 +68,7 @@ import Testing
         settings.menuStyle = .inline
         store.newFile = settings
 
-        guard case .action(let action) = FinderMenu.items(store: store)[0].kind else {
+        guard case .action(let action) = items()[0].kind else {
             Issue.record("Inline item should be an action")
             return
         }
@@ -72,7 +77,7 @@ import Testing
 
     @Test func disabledModuleAddsNothing() {
         store.setEnabled(false, for: NewFileModule())
-        #expect(FinderMenu.items(store: store).isEmpty)
+        #expect(items().isEmpty)
     }
 
     @Test(arguments: NewFileSettings.MenuStyle.allCases)
@@ -81,7 +86,7 @@ import Testing
         settings.menuStyle = style
         FileTemplate.builtIn.forEach { settings.setEnabled(false, for: $0) }
         store.newFile = settings
-        #expect(FinderMenu.items(store: store).isEmpty)
+        #expect(items().isEmpty)
     }
 
     @Test func actionCreatesFileAndRevealsIt() throws {

@@ -21,6 +21,28 @@
         }
       }
     },
+    "Copy Path": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скопировать путь"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Copy the full path of files and folders right from the Finder context menu.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Копируйте полный путь к файлам и папкам прямо из контекстного меню Finder."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "Create text, Markdown, JSON and HTML files right from the Finder context menu.": {
       "localizations": {
         "ru": {
@@ -98,6 +120,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Расширение Finder выключено"
+          }
+        }
+      }
+    },
+    "Full Path": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Полный путь"
           }
         }
       }
@@ -192,6 +224,26 @@
     "Orbit": {
       "shouldTranslate": false
     },
+    "Path Format": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Формат пути"
+          }
+        }
+      }
+    },
+    "Paths look like “%@”. When several items are selected, each path goes on its own line.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пути выглядят как «%@». Если выделено несколько объектов, каждый путь — с новой строки."
+          }
+        }
+      }
+    },
     "Plain Text": {
       "localizations": {
         "ru": {
@@ -202,6 +254,16 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Relative to Home Folder": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Относительно домашней папки"
+          }
+        }
+      }
     },
     "Separate Items": {
       "localizations": {
