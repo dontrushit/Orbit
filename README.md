@@ -7,6 +7,11 @@ Works locally: no servers, accounts or telemetry.
 
 - **New File** — create text, Markdown, JSON and HTML files right from the Finder context menu,
   either in a "New File" submenu or as separate menu items.
+- **Copy Path** — copy the full path of files and folders, or a path relative to the home folder.
+- **Word to PDF** — convert Word documents (.docx) to PDF from the Finder context menu, without Microsoft Word.
+  Conversion happens on your Mac; the PDF is saved next to the document.
+  Pictures in EMF/WMF format (such as equations from the old Equation Editor) appear as empty frames,
+  equations are written out on one line, and footnotes go at the end of the document.
 
 ## Requirements
 

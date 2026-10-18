@@ -40,6 +40,7 @@ enum ModuleSettingsScreens {
         switch id {
         case NewFileModule.id: AnyView(NewFileSettingsView())
         case CopyPathModule.id: AnyView(CopyPathSettingsView())
+        case WordToPDFModule.id: AnyView(WordToPDFSettingsView())
         default: nil
         }
     }

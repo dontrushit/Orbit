@@ -21,6 +21,38 @@
         }
       }
     },
+    "Conversion happens on this Mac. Documents aren’t uploaded anywhere.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конвертация выполняется на этом Mac. Документы никуда не загружаются."
+          }
+        }
+      }
+    },
+    "Convert Word documents to PDF right from the Finder context menu, without Microsoft Word.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конвертируйте документы Word в PDF прямо из контекстного меню Finder, без Microsoft Word."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Convert to PDF": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Конвертировать в PDF"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "Copy Path": {
       "localizations": {
         "ru": {
@@ -138,6 +170,16 @@
       "shouldTranslate": false,
       "extractionState": "manual"
     },
+    "How It Works": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Как это работает"
+          }
+        }
+      }
+    },
     "JSON": {
       "shouldTranslate": false,
       "extractionState": "manual"
@@ -244,6 +286,16 @@
         }
       }
     },
+    "Pictures in EMF and WMF formats, such as equations from the old Equation Editor, appear as empty frames. Footnotes are placed at the end of the document.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Рисунки в форматах EMF и WMF, например формулы из старого редактора формул, показываются пустыми рамками. Сноски размещаются в конце документа."
+          }
+        }
+      }
+    },
     "Plain Text": {
       "localizations": {
         "ru": {
@@ -261,6 +313,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Относительно домашней папки"
+          }
+        }
+      }
+    },
+    "Select Word documents in Finder, Control-click and choose Convert to PDF.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выделите документы Word в Finder, нажмите их, удерживая клавишу Control, и выберите «Конвертировать в PDF»."
           }
         }
       }
@@ -291,6 +353,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Подменю"
+          }
+        }
+      }
+    },
+    "The PDF is saved next to the document. An existing file is never replaced.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF сохраняется рядом с документом. Существующие файлы не заменяются."
           }
         }
       }
@@ -341,6 +413,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Без названия"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Word to PDF": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Word в PDF"
           }
         }
       },
