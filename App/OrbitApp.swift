@@ -21,6 +21,12 @@ struct OrbitApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    // A settings window should open compact: restoring the last state brings back a window
+    // that was once zoomed to the full screen height. `.restorationBehavior(.disabled)` needs macOS 15.
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        UserDefaults.standard.register(defaults: ["NSQuitAlwaysKeepsWindows": false])
+    }
+
     // Orbit has nothing to do in the background yet: closing the window quits the app.
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         true
