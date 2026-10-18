@@ -18,8 +18,14 @@ build: generate
 
 # Compile-only check that doesn't need a signing team. Builds into its own folder:
 # unsigned products over the Debug build break its signature and Finder drops the extension.
+# Xcode registers the built app with Launch Services; a second registered copy of the extension
+# makes the Debug app report it as turned off, so the registration is removed right away.
+CHECK_APP := build/CheckDerivedData/Build/Products/Debug/Orbit.app
+LSREGISTER := /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister
 check: generate
 	$(XCODEBUILD_BASE) -derivedDataPath build/CheckDerivedData CODE_SIGNING_ALLOWED=NO build
+	-pluginkit -r "$(CURDIR)/$(CHECK_APP)/Contents/PlugIns/OrbitFinderExtension.appex" 2>/dev/null
+	-$(LSREGISTER) -u "$(CURDIR)/$(CHECK_APP)" 2>/dev/null
 
 test:
 	swift test --package-path Packages/OrbitKit
