@@ -36,4 +36,9 @@ ln -s /Applications "$STAGING/Applications"
 hdiutil create -volname "Orbit $VERSION" -srcfolder "$STAGING" -fs HFS+ -format UDZO -ov -quiet "$DMG"
 rm -rf "$STAGING"
 
+# Launch Services registered the Release build: its extension would take over the one of the
+# Debug build (same bundle ID), and the Debug app would report the extension as turned off.
+pluginkit -r "$APP/Contents/PlugIns/OrbitFinderExtension.appex" 2>/dev/null || true
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -u "$APP"
+
 echo "Created $DMG"

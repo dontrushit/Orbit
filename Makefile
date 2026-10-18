@@ -5,7 +5,8 @@ PROJECT  := Orbit.xcodeproj
 SCHEME   := Orbit
 DERIVED  := build/DerivedData
 APP      := $(DERIVED)/Build/Products/Debug/Orbit.app
-XCODEBUILD := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -configuration Debug -derivedDataPath $(DERIVED) -destination 'platform=macOS' -quiet -allowProvisioningUpdates
+XCODEBUILD_BASE := xcodebuild -project $(PROJECT) -scheme $(SCHEME) -configuration Debug -destination 'platform=macOS' -quiet -allowProvisioningUpdates
+XCODEBUILD := $(XCODEBUILD_BASE) -derivedDataPath $(DERIVED)
 
 .PHONY: generate build check test run reload logs extension dmg clean
 
@@ -15,9 +16,10 @@ generate:
 build: generate
 	$(XCODEBUILD) build
 
-# Compile-only check that doesn't need a signing team.
+# Compile-only check that doesn't need a signing team. Builds into its own folder:
+# unsigned products over the Debug build break its signature and Finder drops the extension.
 check: generate
-	$(XCODEBUILD) CODE_SIGNING_ALLOWED=NO build
+	$(XCODEBUILD_BASE) -derivedDataPath build/CheckDerivedData CODE_SIGNING_ALLOWED=NO build
 
 test:
 	swift test --package-path Packages/OrbitKit
