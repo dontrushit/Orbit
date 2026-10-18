@@ -9,6 +9,9 @@ final class FinderSync: FIFinderSync {
     /// Actions of the menu built most recently, indexed by `NSMenuItem.tag`.
     /// Finder hands the action a copy of the menu item, so only the tag survives the round trip.
     private var actions: [FinderMenuItem.Action] = []
+    /// Kind of the menu built most recently. Only the items menu acts on the selection:
+    /// on the folder background the subject is the folder itself.
+    private var menuKind = FIMenuKind.contextualMenuForContainer
 
     override init() {
         super.init()
@@ -23,6 +26,7 @@ final class FinderSync: FIFinderSync {
         let items = FinderMenu.items(store: .shared)
         guard !items.isEmpty else { return nil }
 
+        self.menuKind = menuKind
         actions = []
         let menu = NSMenu(title: "")
         for item in items {
@@ -67,17 +71,22 @@ final class FinderSync: FIFinderSync {
             return
         }
         // Items menu: targetedURL() is still the folder being shown, which is where new items belong.
-        guard let folder = FIFinderSyncController.default().targetedURL() else {
+        let controller = FIFinderSyncController.default()
+        guard let folder = controller.targetedURL() else {
             logger.error("No targeted folder")
             return
         }
+        let selectedItems = menuKind == .contextualMenuForItems ? controller.selectedItemURLs() ?? [] : []
 
         do {
-            switch try actions[sender.tag](FinderContext(targetFolder: folder)) {
+            switch try actions[sender.tag](FinderContext(targetFolder: folder, selectedItems: selectedItems)) {
             case .done:
                 break
             case .reveal(let url):
                 NSWorkspace.shared.activateFileViewerSelecting([url])
+            case .copy(let string):
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(string, forType: .string)
             }
         } catch {
             logger.error("Action failed in \(folder.path, privacy: .public): \(error, privacy: .public)")

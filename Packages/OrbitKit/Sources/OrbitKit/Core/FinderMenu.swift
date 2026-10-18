@@ -4,9 +4,12 @@ import Foundation
 public struct FinderContext: Sendable {
     /// The folder the user right-clicked in.
     public let targetFolder: URL
+    /// The items the user right-clicked; empty when the menu was opened on the folder background.
+    public let selectedItems: [URL]
 
-    public init(targetFolder: URL) {
+    public init(targetFolder: URL, selectedItems: [URL] = []) {
         self.targetFolder = targetFolder
+        self.selectedItems = selectedItems
     }
 }
 
@@ -15,6 +18,8 @@ public enum FinderActionResult: Sendable, Equatable {
     case done
     /// Select the item in Finder.
     case reveal(URL)
+    /// Put the text on the clipboard.
+    case copy(String)
 }
 
 /// A platform-neutral description of a Finder context menu item. The extension turns it into `NSMenuItem`.
