@@ -104,4 +104,44 @@ import Testing
         #expect(result == .reveal(expected))
         #expect(FileManager.default.fileExists(atPath: expected.path))
     }
+
+    private func createFile(selecting selection: [URL]) throws -> URL? {
+        guard case .action(let action) = try newFileSubmenu()[0].kind else {
+            Issue.record("Template item should be an action")
+            return nil
+        }
+        guard case .reveal(let url) = try action(FinderContext(targetFolder: folder, selectedItems: selection)) else {
+            Issue.record("New File should reveal the created file")
+            return nil
+        }
+        return url
+    }
+
+    private func makeFolder(_ name: String) throws -> URL {
+        let url = folder.appendingPathComponent(name, isDirectory: true)
+        try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false)
+        return url
+    }
+
+    @Test func createsFileInsideSelectedFolder() throws {
+        let subfolder = try makeFolder("Projects")
+        #expect(try createFile(selecting: [subfolder]) == subfolder.appendingPathComponent("Untitled.txt"))
+    }
+
+    @Test(arguments: ["Tool.app", "Plugin.bundle"])
+    func createsFileNextToSelectedPackage(name: String) throws {
+        let package = try makeFolder(name)
+        #expect(try createFile(selecting: [package]) == folder.appendingPathComponent("Untitled.txt"))
+    }
+
+    @Test func createsFileNextToSelectedFile() throws {
+        let file = folder.appendingPathComponent("Notes.txt")
+        try Data().write(to: file)
+        #expect(try createFile(selecting: [file]) == folder.appendingPathComponent("Untitled.txt"))
+    }
+
+    @Test func createsFileNextToSeveralSelectedFolders() throws {
+        let selection = [try makeFolder("A"), try makeFolder("B")]
+        #expect(try createFile(selecting: selection) == folder.appendingPathComponent("Untitled.txt"))
+    }
 }

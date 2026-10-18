@@ -22,7 +22,7 @@ extension NewFileModule: FinderMenuProviding {
         let baseName = settings.resolvedBaseName
         func item(for template: FileTemplate, title: LocalizedStringResource) -> FinderMenuItem {
             FinderMenuItem(title: title, icon: .fileType(template.fileExtension)) { context in
-                .reveal(try FileCreator.createFile(from: template, baseName: baseName, in: context.targetFolder))
+                .reveal(try FileCreator.createFile(from: template, baseName: baseName, in: Self.destination(for: context)))
             }
         }
 
@@ -33,5 +33,17 @@ extension NewFileModule: FinderMenuProviding {
         case .inline:
             return templates.map { item(for: $0, title: $0.menuTitle) }
         }
+    }
+}
+
+extension NewFileModule {
+    /// A single right-clicked folder gets the file inside it. Otherwise — files, several items,
+    /// packages such as .app or .bundle that look like files in Finder — it goes next to them.
+    static func destination(for context: FinderContext) -> URL {
+        guard context.selectedItems.count == 1, let item = context.selectedItems.first,
+              let values = try? item.resourceValues(forKeys: [.isDirectoryKey, .isPackageKey]),
+              values.isDirectory == true, values.isPackage != true
+        else { return context.targetFolder }
+        return item
     }
 }
