@@ -233,6 +233,16 @@
         }
       }
     },
+    "The menu isn’t available in iCloud Drive folders, including Desktop and Documents when they’re stored in iCloud.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Меню недоступно в папках iCloud Drive, в том числе на рабочем столе и в «Документах», если они хранятся в iCloud."
+          }
+        }
+      }
+    },
     "Turn On…": {
       "localizations": {
         "ru": {

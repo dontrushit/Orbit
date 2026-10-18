@@ -41,11 +41,13 @@ struct NewFileSettingsView: View {
         } header: {
             Text("Finder Menu")
         } footer: {
-            Group {
+            VStack(alignment: .leading, spacing: 4) {
                 switch model.settings.menuStyle {
                 case .submenu: Text("File types are grouped in the “New File” submenu.")
                 case .inline: Text("Each file type is a separate item, such as “New Text File”.")
                 }
+                // Since macOS 14, Finder doesn't show third-party Finder Sync menu items in iCloud Drive.
+                Text("The menu isn’t available in iCloud Drive folders, including Desktop and Documents when they’re stored in iCloud.")
             }
             .foregroundStyle(.secondary)
         }
