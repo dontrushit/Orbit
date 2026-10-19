@@ -23,7 +23,7 @@ public enum PDFTools {
     /// next to the first one as "Report (merged).pdf", "Report (merged) 2.pdf", … Nothing is written
     /// if any document can't be read.
     public static func merge(_ sources: [URL]) throws -> URL {
-        let sorted = sources.sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
+        let sorted = sortedByName(sources)
         guard sorted.count >= 2, let first = sorted.first else { throw Failure.tooFewDocuments }
 
         // Release the documents as soon as the result is written: they can be large.
@@ -70,6 +70,11 @@ public enum PDFTools {
             }
             return folder
         }
+    }
+
+    /// In the order Finder sorts files by name: "2" before "10".
+    public static func sortedByName(_ urls: [URL]) -> [URL] {
+        urls.sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
     }
 
     private static func open(_ url: URL) throws -> PDFDocument {

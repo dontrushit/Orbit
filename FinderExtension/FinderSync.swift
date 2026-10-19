@@ -110,6 +110,35 @@ final class FinderSync: FIFinderSync {
         case .copy(let string):
             NSPasteboard.general.clearContents()
             NSPasteboard.general.setString(string, forType: .string)
+        case .openInOrbit(let urls):
+            openInOrbit(urls)
         }
+    }
+
+    @MainActor
+    private static func openInOrbit(_ urls: [URL]) {
+        let logger = Log.logger("FinderSync")
+        guard let app = containingApp else {
+            logger.error("Can't find the Orbit app containing the extension at \(Bundle.main.bundlePath, privacy: .public)")
+            NSSound.beep()
+            return
+        }
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.addsToRecentItems = false
+        NSWorkspace.shared.open(urls, withApplicationAt: app, configuration: configuration) { _, error in
+            guard let error else { return }
+            logger.error("Can't open files in Orbit: \(error, privacy: .public)")
+            DispatchQueue.main.async { NSSound.beep() }
+        }
+    }
+
+    /// The Orbit.app this extension is embedded in (Orbit.app/Contents/PlugIns/OrbitFinderExtension.appex).
+    /// Not the copy Launch Services would choose: with several builds on the Mac, that may be another one.
+    private static var containingApp: URL? {
+        let app = Bundle.main.bundleURL.deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        guard app.pathExtension == "app", let appID = Bundle(url: app)?.bundleIdentifier,
+              Bundle.main.bundleIdentifier?.hasPrefix(appID + ".") == true
+        else { return nil }
+        return app
     }
 }

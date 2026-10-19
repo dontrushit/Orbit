@@ -53,6 +53,36 @@
         }
       }
     },
+    "Cancel": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отменить"
+          }
+        }
+      }
+    },
+    "Choose pages and order first": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала выбирать страницы и порядок"
+          }
+        }
+      }
+    },
+    "Choose pages first": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сначала выбирать страницы"
+          }
+        }
+      }
+    },
     "Conversion happens on this Mac. Documents aren’t uploaded anywhere.": {
       "localizations": {
         "ru": {
@@ -124,6 +154,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Каждый тип файла — отдельный пункт, например «Новый текстовый файл»."
+          }
+        }
+      }
+    },
+    "Each page as a separate file": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждую страницу отдельным файлом"
           }
         }
       }
@@ -231,6 +271,17 @@
       },
       "extractionState": "manual"
     },
+    "Merge PDFs…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединить PDF…"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "Merge and split PDF files right from the Finder context menu.": {
       "localizations": {
         "ru": {
@@ -241,6 +292,16 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Merge right away": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединять сразу"
+          }
+        }
+      }
     },
     "Modules": {
       "localizations": {
@@ -442,12 +503,33 @@
         }
       }
     },
+    "Split %@": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разделить %@"
+          }
+        }
+      }
+    },
     "Split PDF": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Разделить PDF"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Split PDF…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разделить PDF…"
           }
         }
       },

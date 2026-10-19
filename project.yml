@@ -46,6 +46,13 @@ targets:
         LSApplicationCategoryType: public.app-category.utilities
         NSHumanReadableCopyright: ""
         OrbitAppGroupID: $(ORBIT_APP_GROUP_ID)
+        # PDF Tools windows: the Finder extension opens the selected PDFs with Orbit.
+        # Rank None keeps Orbit from becoming a PDF viewer or showing up in Open With.
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: PDF Document
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: None
+            LSItemContentTypes: [com.adobe.pdf]
     entitlements:
       path: App/Orbit.entitlements
       properties:

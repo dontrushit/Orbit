@@ -169,4 +169,84 @@ import Testing
         #expect(titles(["A.pdf"]).isEmpty)
         #expect(titles(["A.pdf", "B.pdf"]).isEmpty)
     }
+
+    @Test func choosingPagesOpensOrbit() throws {
+        var settings = store.pdfTools
+        settings.mergeMode = .choosePages
+        settings.splitMode = .choosePages
+        store.pdfTools = settings
+
+        #expect(titles(["A.pdf"]) == ["Split PDF…"])
+        #expect(titles(["A.pdf", "B.pdf"]) == ["Merge PDFs…"])
+
+        let selection = ["B.pdf", "A.pdf"].map { folder.appendingPathComponent($0) }
+        let items = FinderMenu.items(store: store, selection: selection, modules: [PDFToolsModule()])
+        // Opening a window is quick: it shouldn't wait behind a long merge.
+        #expect(items.first?.isLongRunning == false)
+        guard case .action(let action) = try #require(items.first).kind else {
+            Issue.record("Merge should be an action")
+            return
+        }
+        #expect(try action(FinderContext(targetFolder: folder, selectedItems: selection)) == .openInOrbit(selection))
+    }
+
+    @Test func modesAreIndependent() {
+        var settings = store.pdfTools
+        settings.splitMode = .choosePages
+        store.pdfTools = settings
+
+        #expect(titles(["A.pdf"]) == ["Split PDF…"])
+        #expect(titles(["A.pdf", "B.pdf"]) == ["Merge PDFs"])
+    }
+}
+
+@Suite struct PDFToolsSettingsTests {
+    @Test func defaultsToImmediateMode() {
+        #expect(PDFToolsSettings().mergeMode == .immediate)
+        #expect(PDFToolsSettings().splitMode == .immediate)
+    }
+
+    @Test func decodesSettingsWithMissingFields() throws {
+        let settings = try JSONDecoder().decode(PDFToolsSettings.self, from: Data(#"{"splitMode": "choosePages"}"#.utf8))
+        #expect(settings.mergeMode == .immediate)
+        #expect(settings.splitMode == .choosePages)
+    }
+
+    @Test func unknownModeFallsBackToDefault() throws {
+        let json = #"{"mergeMode": "magic", "splitMode": "choosePages"}"#
+        let settings = try JSONDecoder().decode(PDFToolsSettings.self, from: Data(json.utf8))
+        #expect(settings.mergeMode == .immediate)
+        #expect(settings.splitMode == .choosePages)
+    }
+
+    @Test func roundTripsThroughJSON() throws {
+        var settings = PDFToolsSettings()
+        settings.mergeMode = .choosePages
+        let decoded = try JSONDecoder().decode(PDFToolsSettings.self, from: JSONEncoder().encode(settings))
+        #expect(decoded == settings)
+    }
+}
+
+@Suite struct PDFToolsRequestTests {
+    private func url(_ name: String) -> URL {
+        URL(fileURLWithPath: "/tmp/Orbit/\(name)")
+    }
+
+    @Test func onePDFIsSplit() {
+        #expect(PDFToolsRequest(urls: [url("A.pdf")]) == .split(url("A.pdf")))
+    }
+
+    @Test func severalPDFsAreMergedInNameOrder() {
+        #expect(PDFToolsRequest(urls: [url("10.pdf"), url("2.PDF")]) == .merge([url("2.PDF"), url("10.pdf")]))
+    }
+
+    @Test func ignoresOtherFilesAndDuplicates() {
+        let urls = [url("A.pdf"), url("Photo.jpg"), url("A.pdf"), URL(string: "https://example.com/B.pdf")!]
+        #expect(PDFToolsRequest(urls: urls) == .split(url("A.pdf")))
+    }
+
+    @Test func nothingToDoWithoutPDFs() {
+        #expect(PDFToolsRequest(urls: []) == nil)
+        #expect(PDFToolsRequest(urls: [url("Photo.jpg")]) == nil)
+    }
 }

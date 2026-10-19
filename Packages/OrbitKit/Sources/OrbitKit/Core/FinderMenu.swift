@@ -20,6 +20,8 @@ public enum FinderActionResult: Sendable, Equatable {
     case reveal([URL])
     /// Put the text on the clipboard.
     case copy(String)
+    /// Open the files in Orbit.app, which shows a window for them.
+    case openInOrbit([URL])
 }
 
 /// A platform-neutral description of a Finder context menu item. The extension turns it into `NSMenuItem`.

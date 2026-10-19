@@ -16,14 +16,33 @@ public struct PDFToolsModule: OrbitModule {
 extension PDFToolsModule: FinderMenuProviding {
     public func finderMenuItems(store: SettingsStore, selection: [URL]) -> [FinderMenuItem] {
         guard !selection.isEmpty, selection.allSatisfy(PDFTools.isPDF) else { return [] }
+        let settings = store.pdfTools
+        // An ellipsis tells that the item asks for more input before acting, as everywhere in macOS.
         if selection.count == 1 {
-            return [FinderMenuItem(title: "Split PDF", icon: .symbol("arrow.triangle.branch"), isLongRunning: true) { context in
-                guard let source = context.selectedItems.first(where: PDFTools.isPDF) else { throw PDFTools.Failure.tooFewDocuments }
-                return .reveal([try PDFTools.split(source)])
-            }]
+            switch settings.splitMode {
+            case .immediate:
+                return [FinderMenuItem(title: "Split PDF", icon: .symbol("arrow.triangle.branch"), isLongRunning: true) { context in
+                    guard let source = context.selectedItems.first(where: PDFTools.isPDF) else { throw PDFTools.Failure.tooFewDocuments }
+                    return .reveal([try PDFTools.split(source)])
+                }]
+            case .choosePages:
+                return [FinderMenuItem(title: "Split PDF…", icon: .symbol("arrow.triangle.branch"), action: Self.openInOrbit)]
+            }
         }
-        return [FinderMenuItem(title: "Merge PDFs", icon: .symbol("arrow.triangle.merge"), isLongRunning: true) { context in
-            .reveal([try PDFTools.merge(context.selectedItems.filter(PDFTools.isPDF))])
-        }]
+        switch settings.mergeMode {
+        case .immediate:
+            return [FinderMenuItem(title: "Merge PDFs", icon: .symbol("arrow.triangle.merge"), isLongRunning: true) { context in
+                .reveal([try PDFTools.merge(context.selectedItems.filter(PDFTools.isPDF))])
+            }]
+        case .choosePages:
+            return [FinderMenuItem(title: "Merge PDFs…", icon: .symbol("arrow.triangle.merge"), action: Self.openInOrbit)]
+        }
+    }
+
+    /// The window is shown by Orbit.app: windows of a sandboxed Finder extension open behind Finder.
+    @Sendable private static func openInOrbit(_ context: FinderContext) throws -> FinderActionResult {
+        let documents = context.selectedItems.filter(PDFTools.isPDF)
+        guard !documents.isEmpty else { throw PDFTools.Failure.tooFewDocuments }
+        return .openInOrbit(documents)
     }
 }
