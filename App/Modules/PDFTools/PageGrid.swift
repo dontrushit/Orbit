@@ -2,12 +2,19 @@ import OrbitKit
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// Thumbnails of the pages in a scrolling grid. A click leaves a page out or brings it back; with `reorders`,
-/// pages can be dragged into a new order. Keyboard: arrows move the focus, Space toggles, Delete leaves out.
+/// Thumbnails of the pages in a scrolling grid. A click toggles a page. Keyboard: arrows move the focus,
+/// Space toggles, Delete turns a page off.
 struct PageGrid: View {
+    enum Style {
+        /// Every page is in; a click leaves one out, dragging reorders (Merge).
+        case exclusion
+        /// Pages are picked with a check mark, the order is fixed (Split).
+        case selection
+    }
+
     @Binding var arrangement: PageArrangement
     let thumbnails: PDFThumbnailLoader
-    var reorders = true
+    var style = Style.exclusion
 
     @FocusState private var isFocused: Bool
     @State private var focusedID: PageArrangement.Item.ID?
@@ -39,7 +46,7 @@ struct PageGrid: View {
     }
 
     private func cell(for item: PageArrangement.Item) -> some View {
-        PageCell(item: item, thumbnails: thumbnails, isFocused: isFocused && focusedID == item.id)
+        PageCell(item: item, thumbnails: thumbnails, style: style, isFocused: isFocused && focusedID == item.id)
             .onTapGesture {
                 focusedID = item.id
                 isFocused = true
@@ -47,7 +54,7 @@ struct PageGrid: View {
             }
             .accessibilityAction { arrangement.toggle(item.id) }
             .id(item.id)
-            .modifier(Reordering(isEnabled: reorders, item: item.id, draggedID: $draggedID) { dragged, target in
+            .modifier(Reordering(isEnabled: style == .exclusion, item: item.id, draggedID: $draggedID) { dragged, target in
                 withAnimation(.snappy) { arrangement.move(dragged, to: target) }
             })
     }
@@ -88,6 +95,7 @@ private enum Layout {
 private struct PageCell: View {
     let item: PageArrangement.Item
     let thumbnails: PDFThumbnailLoader
+    let style: PageGrid.Style
     let isFocused: Bool
 
     @State private var image: CGImage?
@@ -96,16 +104,8 @@ private struct PageCell: View {
         VStack(spacing: 6) {
             thumbnail
                 .frame(width: 100, height: 130)
-                .opacity(item.isIncluded ? 1 : 0.3)
-                .overlay(alignment: .bottomTrailing) {
-                    if !item.isIncluded {
-                        Image(systemName: "minus.circle.fill")
-                            .symbolRenderingMode(.palette)
-                            .foregroundStyle(.white, .secondary)
-                            .font(.title3)
-                            .offset(x: 4, y: 4)
-                    }
-                }
+                .opacity(style == .exclusion && !item.isIncluded ? 0.3 : 1)
+                .overlay(alignment: .bottomTrailing) { badge.offset(x: 4, y: 4) }
                 .padding(5)
                 .overlay {
                     RoundedRectangle(cornerRadius: 6)
@@ -114,7 +114,7 @@ private struct PageCell: View {
                 }
             Text(verbatim: "\(item.page.index + 1) · \(documentName)")
                 .font(.caption)
-                .foregroundStyle(item.isIncluded ? .primary : .secondary)
+                .foregroundStyle(style == .exclusion && !item.isIncluded ? .secondary : .primary)
                 .lineLimit(1)
                 .truncationMode(.middle)
         }
@@ -128,8 +128,40 @@ private struct PageCell: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Page \(item.page.index + 1), \(documentName)"))
-        .accessibilityValue(item.isIncluded ? Text("Included") : Text("Left out"))
-        .accessibilityAddTraits(.isButton)
+        .accessibilityValue(accessibilityValue)
+        .accessibilityAddTraits(style == .selection && item.isIncluded ? [.isButton, .isSelected] : .isButton)
+    }
+
+    @ViewBuilder private var badge: some View {
+        switch style {
+        case .exclusion:
+            if !item.isIncluded {
+                Image(systemName: "minus.circle.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .secondary)
+                    .font(.title3)
+            }
+        case .selection:
+            // Empty circles on unselected pages tell that pages can be picked, as in Photos.
+            if item.isIncluded {
+                Image(systemName: "checkmark.circle.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, Color.accentColor)
+                    .font(.title3)
+            } else {
+                Image(systemName: "circle")
+                    .foregroundStyle(.secondary)
+                    .background(Circle().fill(.background))
+                    .font(.title3)
+            }
+        }
+    }
+
+    private var accessibilityValue: Text {
+        switch style {
+        case .exclusion: item.isIncluded ? Text("Included") : Text("Left out")
+        case .selection: item.isIncluded ? Text("Selected") : Text("Not selected")
+        }
     }
 
     @ViewBuilder private var thumbnail: some View {

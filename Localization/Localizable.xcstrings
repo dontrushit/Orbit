@@ -12,6 +12,17 @@
       },
       "extractionState": "manual"
     },
+    "%@ (pages)": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (выбранные страницы)"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "%@ Pages": {
       "localizations": {
         "ru": {
@@ -29,6 +40,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld из %2$lld стр."
+          }
+        }
+      }
+    },
+    "%lld selected": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрано: %lld"
           }
         }
       }
@@ -83,6 +104,16 @@
         }
       }
     },
+    "Can’t Split PDF": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось разделить PDF"
+          }
+        }
+      }
+    },
     "Choose pages and order first": {
       "localizations": {
         "ru": {
@@ -108,7 +139,17 @@
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Нажмите страницу, чтобы исключить её. Перетащите, чтобы изменить порядок."
+            "value": "Нажмите на страницу, чтобы исключить её, или перетащите, чтобы изменить порядок."
+          }
+        }
+      }
+    },
+    "Click a page to select it.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите на страницу, чтобы выбрать её."
           }
         }
       }
@@ -178,6 +219,16 @@
       },
       "extractionState": "manual"
     },
+    "Deselect All": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Снять выбор"
+          }
+        }
+      }
+    },
     "Each file type is a separate item, such as “New Text File”.": {
       "localizations": {
         "ru": {
@@ -198,12 +249,42 @@
         }
       }
     },
+    "Each selected page as a separate file": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каждая страница — отдельным файлом"
+          }
+        }
+      }
+    },
     "Enabled": {
       "localizations": {
         "ru": {
           "stringUnit": {
             "state": "translated",
             "value": "Включено"
+          }
+        }
+      }
+    },
+    "Extract": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Извлечь"
+          }
+        }
+      }
+    },
+    "Extracting…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Извлечение…"
           }
         }
       }
@@ -448,6 +529,16 @@
         }
       }
     },
+    "Not selected": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не выбрана"
+          }
+        }
+      }
+    },
     "OK": {
       "localizations": {
         "ru": {
@@ -553,6 +644,26 @@
         }
       }
     },
+    "Save As": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сохранить как"
+          }
+        }
+      }
+    },
+    "Select All": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать все"
+          }
+        }
+      }
+    },
     "Select Word documents in Finder, Control-click and choose Convert to PDF.": {
       "localizations": {
         "ru": {
@@ -583,6 +694,26 @@
         }
       }
     },
+    "Selected": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрана"
+          }
+        }
+      }
+    },
+    "Selected pages in one file": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Одним файлом"
+          }
+        }
+      }
+    },
     "Separate Items": {
       "localizations": {
         "ru": {
@@ -599,6 +730,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Настройки"
+          }
+        }
+      }
+    },
+    "Split": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разделить"
           }
         }
       }
@@ -634,6 +775,16 @@
         }
       },
       "extractionState": "manual"
+    },
+    "Splitting…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разделение…"
+          }
+        }
+      }
     },
     "Submenu": {
       "localizations": {
@@ -753,6 +904,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "«%@» изменился, пока окно было открыто. Закройте окно и попробуйте снова, чтобы увидеть его текущие страницы."
+          }
+        }
+      }
+    },
+    "“%@” has only one page, so there’s nothing to split.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В «%@» только одна страница — разделять нечего."
           }
         }
       }

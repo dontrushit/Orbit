@@ -83,6 +83,46 @@ import Testing
         #expect(try FileManager.default.contentsOfDirectory(atPath: folder.path) == ["A.pdf"])
     }
 
+    // MARK: Splitting chosen pages
+
+    @Test func extractsChosenPagesInDocumentOrder() throws {
+        let url = try makePDF("Report.pdf", widths: [100, 110, 120, 130])
+        let result = try PDFTools.extract(pages: [3, 0, 2, 0], from: url)
+        #expect(result == folder.appendingPathComponent("Report (pages).pdf"))
+        #expect(try PDFFixture.pageWidths(result) == [100, 120, 130])
+        #expect(try PDFTools.extract(pages: [1], from: url).lastPathComponent == "Report (pages) 2.pdf")
+    }
+
+    @Test func extractRefusesEmptyChoiceAndPagesThatAreGone() throws {
+        let url = try makePDF("Report.pdf", widths: [100, 110])
+        #expect(throws: PDFTools.Failure.noPages) { try PDFTools.extract(pages: [], from: url) }
+        #expect(throws: PDFTools.Failure.modified) { try PDFTools.extract(pages: [0, 2], from: url) }
+        #expect(try FileManager.default.contentsOfDirectory(atPath: folder.path) == ["Report.pdf"])
+    }
+
+    @Test func splitsChosenPagesNumberedAsInDocument() throws {
+        let url = try makePDF("Report.pdf", widths: [100, 110, 120, 130])
+        let result = try PDFTools.split(url, pages: [3, 1])
+        #expect(result.lastPathComponent == "Report Pages")
+        let names = try FileManager.default.contentsOfDirectory(atPath: result.path).sorted()
+        #expect(names == ["Report 2.pdf", "Report 4.pdf"])
+        #expect(try PDFFixture.pageWidths(result.appendingPathComponent("Report 4.pdf")) == [130])
+    }
+
+    @Test func splitsSingleChosenPage() throws {
+        let url = try makePDF("Report.pdf", widths: [100, 110])
+        let result = try PDFTools.split(url, pages: [1])
+        #expect(try FileManager.default.contentsOfDirectory(atPath: result.path) == ["Report 2.pdf"])
+        #expect(try PDFTools.split(url, pages: [0]).lastPathComponent == "Report Pages 2")
+    }
+
+    @Test func splitRefusesEmptyChoiceAndPagesThatAreGone() throws {
+        let url = try makePDF("Report.pdf", widths: [100, 110])
+        #expect(throws: PDFTools.Failure.noPages) { try PDFTools.split(url, pages: []) }
+        #expect(throws: PDFTools.Failure.modified) { try PDFTools.split(url, pages: [0, 5]) }
+        #expect(try FileManager.default.contentsOfDirectory(atPath: folder.path) == ["Report.pdf"])
+    }
+
     // MARK: Thumbnails
 
     @Test func rendersThumbnailWithinMaxSize() throws {

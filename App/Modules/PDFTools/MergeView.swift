@@ -52,9 +52,9 @@ struct MergeView: View {
                 Button("Cancel", action: model.cancel)
                     .keyboardShortcut(.cancelAction)
                     .disabled(model.phase == .saving)
-                Button("Merge", action: model.merge)
+                Button("Merge", action: model.perform)
                     .keyboardShortcut(.defaultAction)
-                    .disabled(!model.canMerge)
+                    .disabled(!model.canPerform)
             }
             .padding(16)
         }

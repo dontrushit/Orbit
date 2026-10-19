@@ -63,29 +63,57 @@ public enum PDFTools {
     }
 
     private static func write(merging pages: [PageReference], from documents: [URL: PDFDocument]) throws -> URL {
-        let merged = PDFDocument()
-        for reference in pages {
-            // A page belongs to one document, so the merged one gets a copy.
-            guard let page = try page(reference, in: documents).copy() as? PDFPage else { throw Failure.unreadable }
-            merged.insert(page, at: merged.pageCount)
-        }
-        guard let data = merged.dataRepresentation(), let first = pages.first?.document else { throw Failure.unwritable }
+        guard let first = pages.first?.document else { throw Failure.noPages }
         let name = first.deletingPathExtension().lastPathComponent
-        return try FileCreator.write(data, baseName: String(localized: "\(name) (merged)"), fileExtension: "pdf",
-                                     in: first.deletingLastPathComponent())
+        return try write(pages, from: documents, baseName: String(localized: "\(name) (merged)"), in: first.deletingLastPathComponent())
     }
 
-    /// Saves every page as "Report 1.pdf", "Report 2.pdf", … in a new folder "Report Pages" next to the document
-    /// and returns the folder. If a page fails, the folder is removed, so no partial result is left behind.
-    public static func split(_ source: URL) throws -> URL {
+    /// Saves the chosen pages, in the document's order, as one file next to it: "Report (pages).pdf".
+    /// - Parameter pages: Zero-based page indexes.
+    public static func extract(pages: [Int], from source: URL) throws -> URL {
+        let indexes = Array(Set(pages)).sorted()
+        guard !indexes.isEmpty else { throw Failure.noPages }
+        return try autoreleasepool {
+            let references = indexes.map { PageReference(document: source, index: $0) }
+            let name = source.deletingPathExtension().lastPathComponent
+            return try write(references, from: [source: open(source)], baseName: String(localized: "\(name) (pages)"),
+                             in: source.deletingLastPathComponent())
+        }
+    }
+
+    private static func write(_ pages: [PageReference], from documents: [URL: PDFDocument], baseName: String, in folder: URL) throws -> URL {
+        let result = PDFDocument()
+        for reference in pages {
+            // A page belongs to one document, so the result gets a copy.
+            guard let page = try page(reference, in: documents).copy() as? PDFPage else { throw Failure.unreadable }
+            result.insert(page, at: result.pageCount)
+        }
+        guard let data = result.dataRepresentation() else { throw Failure.unwritable }
+        return try FileCreator.write(data, baseName: baseName, fileExtension: "pdf", in: folder)
+    }
+
+    /// Saves pages as "Report 1.pdf", "Report 2.pdf", … in a new folder "Report Pages" next to the document
+    /// and returns the folder. Files are numbered as the pages are in the document. If a page fails,
+    /// the folder is removed, so no partial result is left behind.
+    /// - Parameter pages: Zero-based indexes of the pages to save; all of them if `nil`, which needs at least two.
+    public static func split(_ source: URL, pages: [Int]? = nil) throws -> URL {
         try autoreleasepool {
             let document = try open(source)
-            guard document.pageCount > 1 else { throw Failure.singlePage }
+            let indexes: [Int]
+            if let pages {
+                indexes = Array(Set(pages)).sorted()
+                guard !indexes.isEmpty else { throw Failure.noPages }
+                // Checked before the folder exists, so a changed document leaves nothing behind.
+                guard indexes.allSatisfy({ (0..<document.pageCount).contains($0) }) else { throw Failure.modified }
+            } else {
+                guard document.pageCount > 1 else { throw Failure.singlePage }
+                indexes = Array(0..<document.pageCount)
+            }
 
             let name = source.deletingPathExtension().lastPathComponent
             let folder = try FileCreator.createFolder(baseName: String(localized: "\(name) Pages"), in: source.deletingLastPathComponent())
             do {
-                for index in 0..<document.pageCount {
+                for index in indexes {
                     try autoreleasepool {
                         guard let page = document.page(at: index)?.copy() as? PDFPage else { throw Failure.unreadable }
                         let single = PDFDocument()
