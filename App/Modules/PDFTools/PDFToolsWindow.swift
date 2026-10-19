@@ -26,8 +26,15 @@ final class PDFToolsWindowController: NSObject, NSWindowDelegate {
         )
         super.init()
 
-        let view = PDFToolsPlaceholderView(request: request) { [weak window] in window?.close() }
-        window.contentViewController = NSHostingController(rootView: view)
+        let close: () -> Void = { [weak window] in window?.close() }
+        switch request {
+        case .merge(let documents):
+            let model = PDFPagesModel(documents: documents, close: close)
+            window.contentViewController = NSHostingController(rootView: MergeView(model: model))
+            model.load()
+        case .split:
+            window.contentViewController = NSHostingController(rootView: PDFToolsPlaceholderView(request: request, close: close))
+        }
         window.setContentSize(NSSize(width: 600, height: 450))
         window.contentMinSize = NSSize(width: 480, height: 360)
         window.title = Self.title(for: request)

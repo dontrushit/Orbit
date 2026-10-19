@@ -11,7 +11,13 @@ public enum PDFTools {
         case locked
         /// A one-page document has nothing to split.
         case singlePage
+        /// Every page was left out.
+        case noPages
         case unwritable
+        /// The file is gone since it was inspected.
+        case missing
+        /// The file changed since it was inspected: the chosen pages may no longer be the same.
+        case modified
     }
 
     /// Whether the file looks like a PDF. Doesn't touch the disk, so it's cheap enough for menus.
@@ -19,29 +25,54 @@ public enum PDFTools {
         url.pathExtension.lowercased() == "pdf"
     }
 
+    /// A page of a PDF file on disk.
+    public struct PageReference: Hashable, Sendable {
+        public let document: URL
+        /// Zero-based.
+        public let index: Int
+
+        public init(document: URL, index: Int) {
+            self.document = document
+            self.index = index
+        }
+    }
+
     /// Joins the documents in the order Finder sorts them by name ("2" before "10") and writes the result
     /// next to the first one as "Report (merged).pdf", "Report (merged) 2.pdf", … Nothing is written
     /// if any document can't be read.
     public static func merge(_ sources: [URL]) throws -> URL {
         let sorted = sortedByName(sources)
-        guard sorted.count >= 2, let first = sorted.first else { throw Failure.tooFewDocuments }
-
+        guard sorted.count >= 2 else { throw Failure.tooFewDocuments }
         // Release the documents as soon as the result is written: they can be large.
         return try autoreleasepool {
-            let merged = PDFDocument()
-            for source in sorted {
-                let document = try open(source)
-                for index in 0..<document.pageCount {
-                    // A page belongs to one document, so the merged one gets a copy.
-                    guard let page = document.page(at: index)?.copy() as? PDFPage else { throw Failure.unreadable }
-                    merged.insert(page, at: merged.pageCount)
-                }
+            let documents = try openDocuments(sorted)
+            let pages = sorted.flatMap { url in
+                (0..<(documents[url]?.pageCount ?? 0)).map { PageReference(document: url, index: $0) }
             }
-            guard let data = merged.dataRepresentation() else { throw Failure.unwritable }
-            let name = first.deletingPathExtension().lastPathComponent
-            return try FileCreator.write(data, baseName: String(localized: "\(name) (merged)"), fileExtension: "pdf",
-                                         in: first.deletingLastPathComponent())
+            return try write(merging: pages, from: documents)
         }
+    }
+
+    /// Joins the pages in the given order. The result is named after the document of the first page
+    /// and saved next to it, like `merge(_:)` does.
+    public static func merge(pages: [PageReference]) throws -> URL {
+        guard !pages.isEmpty else { throw Failure.noPages }
+        return try autoreleasepool {
+            try write(merging: pages, from: openDocuments(pages.map(\.document)))
+        }
+    }
+
+    private static func write(merging pages: [PageReference], from documents: [URL: PDFDocument]) throws -> URL {
+        let merged = PDFDocument()
+        for reference in pages {
+            // A page belongs to one document, so the merged one gets a copy.
+            guard let page = try page(reference, in: documents).copy() as? PDFPage else { throw Failure.unreadable }
+            merged.insert(page, at: merged.pageCount)
+        }
+        guard let data = merged.dataRepresentation(), let first = pages.first?.document else { throw Failure.unwritable }
+        let name = first.deletingPathExtension().lastPathComponent
+        return try FileCreator.write(data, baseName: String(localized: "\(name) (merged)"), fileExtension: "pdf",
+                                     in: first.deletingLastPathComponent())
     }
 
     /// Saves every page as "Report 1.pdf", "Report 2.pdf", … in a new folder "Report Pages" next to the document
@@ -75,6 +106,23 @@ public enum PDFTools {
     /// In the order Finder sorts files by name: "2" before "10".
     public static func sortedByName(_ urls: [URL]) -> [URL] {
         urls.sorted { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending }
+    }
+
+    /// Every distinct document opened once.
+    private static func openDocuments(_ urls: [URL]) throws -> [URL: PDFDocument] {
+        var documents: [URL: PDFDocument] = [:]
+        for url in urls where documents[url] == nil {
+            documents[url] = try open(url)
+        }
+        return documents
+    }
+
+    private static func page(_ reference: PageReference, in documents: [URL: PDFDocument]) throws -> PDFPage {
+        // PDFKit raises an Objective-C exception for an index out of range, so check it first.
+        guard let document = documents[reference.document], document.pageCount > reference.index, reference.index >= 0,
+              let page = document.page(at: reference.index)
+        else { throw Failure.modified }
+        return page
     }
 
     private static func open(_ url: URL) throws -> PDFDocument {

@@ -23,6 +23,16 @@
       },
       "extractionState": "manual"
     },
+    "%lld of %lld pages": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld из %2$lld стр."
+          }
+        }
+      }
+    },
     "About Orbit": {
       "localizations": {
         "ru": {
@@ -63,6 +73,16 @@
         }
       }
     },
+    "Can’t Merge PDFs": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось объединить PDF"
+          }
+        }
+      }
+    },
     "Choose pages and order first": {
       "localizations": {
         "ru": {
@@ -79,6 +99,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сначала выбирать страницы"
+          }
+        }
+      }
+    },
+    "Click a page to exclude it. Drag to reorder.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нажмите страницу, чтобы исключить её. Перетащите, чтобы изменить порядок."
           }
         }
       }
@@ -252,13 +282,43 @@
         }
       }
     },
+    "Included": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включена"
+          }
+        }
+      }
+    },
     "JSON": {
       "shouldTranslate": false,
       "extractionState": "manual"
     },
+    "Left out": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Исключена"
+          }
+        }
+      }
+    },
     "Markdown": {
       "shouldTranslate": false,
       "extractionState": "manual"
+    },
+    "Merge": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединить"
+          }
+        }
+      }
     },
     "Merge PDFs": {
       "localizations": {
@@ -299,6 +359,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Объединять сразу"
+          }
+        }
+      }
+    },
+    "Merging…": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединение…"
           }
         }
       }
@@ -378,6 +448,26 @@
         }
       }
     },
+    "OK": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ОК"
+          }
+        }
+      }
+    },
+    "One of the files can’t be read. Close the window and try again.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Один из файлов не читается. Закройте окно и попробуйте снова."
+          }
+        }
+      }
+    },
     "Orbit": {
       "shouldTranslate": false
     },
@@ -398,6 +488,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "PDF-файлы обрабатываются на этом Mac. Они никуда не загружаются."
+          }
+        }
+      }
+    },
+    "Page %lld, %@": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Страница %1$lld, %2$@"
           }
         }
       }
@@ -545,6 +645,16 @@
         }
       }
     },
+    "The PDF file couldn’t be saved.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось сохранить PDF-файл."
+          }
+        }
+      }
+    },
     "The PDF is saved next to the document. An existing file is never replaced.": {
       "localizations": {
         "ru": {
@@ -626,6 +736,46 @@
         }
       },
       "extractionState": "manual"
+    },
+    "“%@” can’t be read. It may be damaged or not a PDF file.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» не читается. Возможно, файл повреждён или это не PDF."
+          }
+        }
+      }
+    },
+    "“%@” changed while the window was open. Close the window and try again to see its current pages.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» изменился, пока окно было открыто. Закройте окно и попробуйте снова, чтобы увидеть его текущие страницы."
+          }
+        }
+      }
+    },
+    "“%@” is protected with a password.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» защищён паролем."
+          }
+        }
+      }
+    },
+    "“%@” was moved or deleted.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "«%@» перемещён или удалён."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
