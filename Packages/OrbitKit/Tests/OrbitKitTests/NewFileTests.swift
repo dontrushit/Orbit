@@ -53,6 +53,12 @@ import Testing
             try FileCreator.createFile(from: .plainText, baseName: "Untitled", in: self.folder.appendingPathComponent("missing"))
         }
     }
+
+    @Test func numbersFoldersAndTreatsFilesAsTaken() throws {
+        try Data().write(to: folder.appendingPathComponent("Pages 2"))
+        let names = try (1...2).map { _ in try FileCreator.createFolder(baseName: "Pages", in: folder).lastPathComponent }
+        #expect(names == ["Pages", "Pages 3"])
+    }
 }
 
 @Suite struct NewFileSettingsTests {

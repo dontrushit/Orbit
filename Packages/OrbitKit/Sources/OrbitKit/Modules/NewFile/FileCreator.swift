@@ -28,6 +28,20 @@ public enum FileCreator {
         throw Failure.noAvailableName
     }
 
+    /// Creates a folder in `folder` under the first free name — "Pages", "Pages 2", … — never reusing an existing one.
+    static func createFolder(baseName: String, in folder: URL) throws -> URL {
+        for index in 1...maxAttempts {
+            let url = folder.appendingPathComponent(index == 1 ? baseName : "\(baseName) \(index)", isDirectory: true)
+            do {
+                try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false)
+                return url
+            } catch CocoaError.fileWriteFileExists {
+                continue
+            }
+        }
+        throw Failure.noAvailableName
+    }
+
     static func fileName(baseName: String, fileExtension: String, index: Int) -> String {
         index == 1 ? "\(baseName).\(fileExtension)" : "\(baseName) \(index).\(fileExtension)"
     }

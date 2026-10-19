@@ -1,6 +1,28 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ (merged)": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ (объединённый)"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "%@ Pages": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ — страницы"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "About Orbit": {
       "localizations": {
         "ru": {
@@ -17,6 +39,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Добавляет функции, которых нет в macOS.\nРаботает локально: без серверов, аккаунтов и телеметрии."
+          }
+        }
+      }
+    },
+    "Bookmarks (the table of contents) aren’t kept when files are merged. Password-protected PDF files can’t be merged or split.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "При объединении закладки (оглавление) не сохраняются. PDF-файлы, защищённые паролем, нельзя объединить или разделить."
           }
         }
       }
@@ -188,6 +220,28 @@
       "shouldTranslate": false,
       "extractionState": "manual"
     },
+    "Merge PDFs": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединить PDF"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "Merge and split PDF files right from the Finder context menu.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединяйте и разделяйте PDF-файлы прямо из контекстного меню Finder."
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
     "Modules": {
       "localizations": {
         "ru": {
@@ -266,6 +320,27 @@
     "Orbit": {
       "shouldTranslate": false
     },
+    "PDF Tools": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Инструменты PDF"
+          }
+        }
+      },
+      "extractionState": "manual"
+    },
+    "PDF files are processed on this Mac. They aren’t uploaded anywhere.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF-файлы обрабатываются на этом Mac. Они никуда не загружаются."
+          }
+        }
+      }
+    },
     "Path Format": {
       "localizations": {
         "ru": {
@@ -327,6 +402,26 @@
         }
       }
     },
+    "Select one PDF file and choose Split PDF to save each page as a separate file.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выделите один PDF-файл и выберите «Разделить PDF», чтобы сохранить каждую страницу отдельным файлом."
+          }
+        }
+      }
+    },
+    "Select several PDF files in Finder, Control-click and choose Merge PDFs. Pages follow the order of file names.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выделите несколько PDF-файлов в Finder, нажмите их, удерживая клавишу Control, и выберите «Объединить PDF». Страницы идут в порядке имён файлов."
+          }
+        }
+      }
+    },
     "Separate Items": {
       "localizations": {
         "ru": {
@@ -346,6 +441,17 @@
           }
         }
       }
+    },
+    "Split PDF": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Разделить PDF"
+          }
+        }
+      },
+      "extractionState": "manual"
     },
     "Submenu": {
       "localizations": {
@@ -373,6 +479,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Меню недоступно в папках iCloud Drive, в том числе на рабочем столе и в «Документах», если они хранятся в iCloud."
+          }
+        }
+      }
+    },
+    "The merged PDF is saved next to the first file, the pages of a split PDF in a new folder next to it. An existing file is never replaced.": {
+      "localizations": {
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Объединённый PDF сохраняется рядом с первым файлом, страницы разделённого — в новой папке рядом с ним. Существующие файлы не заменяются."
           }
         }
       }

@@ -42,6 +42,7 @@ enum ModuleSettingsScreens {
         NewFileModule.id: { AnyView(NewFileSettingsView()) },
         CopyPathModule.id: { AnyView(CopyPathSettingsView()) },
         WordToPDFModule.id: { AnyView(WordToPDFSettingsView()) },
+        PDFToolsModule.id: { AnyView(PDFToolsSettingsView()) },
     ]
 
     static func view(for id: ModuleID) -> AnyView? {

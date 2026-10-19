@@ -225,7 +225,7 @@ extension WordToPDFTests {
         }
 
         @Test func comesAfterCopyPath() {
-            #expect(ModuleRegistry.all.map(\.id) == [NewFileModule.id, CopyPathModule.id, WordToPDFModule.id])
+            #expect(ModuleRegistry.all.map(\.id) == [NewFileModule.id, CopyPathModule.id, WordToPDFModule.id, PDFToolsModule.id])
         }
     }
 }

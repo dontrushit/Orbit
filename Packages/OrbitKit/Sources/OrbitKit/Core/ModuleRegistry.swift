@@ -4,6 +4,7 @@ public enum ModuleRegistry {
         NewFileModule(),
         CopyPathModule(),
         WordToPDFModule(),
+        PDFToolsModule(),
     ]
 
     public static func module(withID id: ModuleID) -> (any OrbitModule)? {
