@@ -12,6 +12,9 @@ Works locally: no servers, accounts or telemetry.
   Conversion happens on your Mac; the PDF is saved next to the document.
   Pictures in EMF/WMF format (such as equations from the old Equation Editor) appear as empty frames,
   equations are written out on one line, and footnotes go at the end of the document.
+- **PDF Tools** — merge several PDF files into one or split a PDF into separate pages from the Finder context menu.
+  Right away, or in a window where you choose the pages and their order first (set in Orbit).
+  Bookmarks (the table of contents) aren't kept when files are merged; password-protected PDF files aren't supported.
 
 ## Requirements
 
