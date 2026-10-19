@@ -34,19 +34,21 @@ struct ModuleDetailView: View {
 }
 
 /// Maps modules to their settings screens. A module without an entry has no settings.
+@MainActor
 enum ModuleSettingsScreens {
-    @MainActor
+    // Builders rather than views: the module list only asks whether a screen exists,
+    // and creating one reads the module's settings.
+    private static let screens: [ModuleID: @MainActor () -> AnyView] = [
+        NewFileModule.id: { AnyView(NewFileSettingsView()) },
+        CopyPathModule.id: { AnyView(CopyPathSettingsView()) },
+        WordToPDFModule.id: { AnyView(WordToPDFSettingsView()) },
+    ]
+
     static func view(for id: ModuleID) -> AnyView? {
-        switch id {
-        case NewFileModule.id: AnyView(NewFileSettingsView())
-        case CopyPathModule.id: AnyView(CopyPathSettingsView())
-        case WordToPDFModule.id: AnyView(WordToPDFSettingsView())
-        default: nil
-        }
+        screens[id]?()
     }
 
-    @MainActor
     static func hasSettings(for id: ModuleID) -> Bool {
-        view(for: id) != nil
+        screens[id] != nil
     }
 }

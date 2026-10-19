@@ -40,16 +40,20 @@ public struct FinderMenuItem: Sendable {
     public let title: LocalizedStringResource
     public let icon: Icon?
     public let kind: Kind
+    /// The action may take seconds, so it runs apart from quick ones and doesn't hold them up.
+    public let isLongRunning: Bool
 
-    public init(title: LocalizedStringResource, icon: Icon? = nil, action: @escaping Action) {
+    public init(title: LocalizedStringResource, icon: Icon? = nil, isLongRunning: Bool = false, action: @escaping Action) {
         self.title = title
         self.icon = icon
+        self.isLongRunning = isLongRunning
         kind = .action(action)
     }
 
     public init(title: LocalizedStringResource, icon: Icon? = nil, children: [FinderMenuItem]) {
         self.title = title
         self.icon = icon
+        isLongRunning = false
         kind = .submenu(children)
     }
 }

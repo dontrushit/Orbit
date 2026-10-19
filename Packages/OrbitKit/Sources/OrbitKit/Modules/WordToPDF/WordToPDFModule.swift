@@ -17,7 +17,7 @@ extension WordToPDFModule: FinderMenuProviding {
     public func finderMenuItems(store: SettingsStore, selection: [URL]) -> [FinderMenuItem] {
         // Offered only when every selected item is a Word document, like Finder's own Quick Actions.
         guard !selection.isEmpty, selection.allSatisfy(WordToPDFConverter.canConvert) else { return [] }
-        return [FinderMenuItem(title: "Convert to PDF", icon: .fileType("pdf")) { context in
+        return [FinderMenuItem(title: "Convert to PDF", icon: .fileType("pdf"), isLongRunning: true) { context in
             .reveal(try WordToPDFConverter.convert(context.selectedItems.filter(WordToPDFConverter.canConvert)))
         }]
     }

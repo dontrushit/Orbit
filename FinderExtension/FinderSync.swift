@@ -5,13 +5,15 @@ import UniformTypeIdentifiers
 
 final class FinderSync: FIFinderSync {
     private let logger = Log.logger("FinderSync")
-    /// Actions run here, one at a time. Not in a Swift concurrency task: conversion blocks on CoreText,
+    /// Actions run in these queues, one at a time each. Not in a Swift concurrency task: conversion blocks on CoreText,
     /// which deadlocks once every thread of the cooperative pool waits for it.
     private static let actionQueue = DispatchQueue(label: "dev.orbit.FinderSync.actions", qos: .userInitiated)
+    /// Long actions get their own queue, so creating a file or copying a path doesn't wait for a conversion.
+    private static let longRunningActionQueue = DispatchQueue(label: "dev.orbit.FinderSync.longRunningActions", qos: .userInitiated)
 
     /// Actions of the menu built most recently, indexed by `NSMenuItem.tag`.
     /// Finder hands the action a copy of the menu item, so only the tag survives the round trip.
-    private var actions: [FinderMenuItem.Action] = []
+    private var actions: [(run: FinderMenuItem.Action, isLongRunning: Bool)] = []
     /// Kind of the menu built most recently. Only the items menu acts on the selection:
     /// on the folder background the subject is the folder itself.
     private var menuKind = FIMenuKind.contextualMenuForContainer
@@ -47,7 +49,7 @@ final class FinderSync: FIFinderSync {
         case .action(let action):
             menuItem.action = #selector(performAction(_:))
             menuItem.tag = actions.count
-            actions.append(action)
+            actions.append((action, item.isLongRunning))
         case .submenu(let children):
             let submenu = NSMenu(title: menuItem.title)
             for child in children {
@@ -86,9 +88,10 @@ final class FinderSync: FIFinderSync {
         let logger = logger
 
         // Off the main thread: converting a long document takes a while, and the extension must keep answering Finder.
-        Self.actionQueue.async {
+        let queue = action.isLongRunning ? Self.longRunningActionQueue : Self.actionQueue
+        queue.async {
             do {
-                let result = try action(context)
+                let result = try action.run(context)
                 DispatchQueue.main.async { Self.apply(result) }
             } catch {
                 logger.error("Action failed in \(folder.path, privacy: .public): \(error, privacy: .public)")

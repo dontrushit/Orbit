@@ -210,6 +210,7 @@ extension WordToPDFTests {
             let items = items(["A.docx", "B.DOCX"])
             #expect(items.map { String(localized: $0.title) } == ["Convert to PDF"])
             #expect(items.first?.icon == .fileType("pdf"))
+            #expect(items.first?.isLongRunning == true)
         }
 
         @Test func staysOutOfOtherMenus() {

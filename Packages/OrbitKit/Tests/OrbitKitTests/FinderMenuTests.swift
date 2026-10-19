@@ -55,6 +55,7 @@ import Testing
         let items = self.items()
         #expect(items.map(\.icon) == [.fileType("txt"), .fileType("md"), .fileType("json")])
         #expect(items.map { String(localized: $0.title) } == ["New Text File", "New Markdown File", "New JSON File"])
+        #expect(items.allSatisfy { !$0.isLongRunning })
         for item in items {
             guard case .action = item.kind else {
                 Issue.record("Inline items should be actions")
